@@ -1,0 +1,25 @@
+{
+  "name": "SerendipJS",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/SerendipJS.js",
+  "files": ["dist/SerendipJS.js"],
+  "scripts": {
+    "prepack": "npm run build",
+    "build": "rollup -c --configPlugin typescript",
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.5",
+    "jsdom": "^23.0.1",
+    "rollup": "^4.9.1",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-filesize": "^10.0.0",
+    "tslib": "^2.6.2",
+    "vitest": "^1.1.0"
+  }
+}
