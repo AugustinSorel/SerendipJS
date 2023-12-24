@@ -5,7 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "serve:examples": "npx http-server . -o ./examples/"
+    "serve:examples": "npx http-server . -o ./examples/",
+    "test": "pnpm --filter SerendipJS test"
   },
   "keywords": [],
   "author": "",
