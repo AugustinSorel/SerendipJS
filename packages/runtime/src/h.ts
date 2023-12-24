@@ -15,6 +15,8 @@ export type HString = {
 export type HFragment = {
   type: "fragment";
   children: VNodes[];
+
+  domPointer?: HTMLElement;
 };
 
 export type VNodes = H | HString | HFragment;
