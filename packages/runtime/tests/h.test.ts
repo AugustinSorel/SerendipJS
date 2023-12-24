@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { HElement, HFragment, HString, h } from "../h";
+import { HElement, HFragment, HString, h } from "../src/h";
 
 describe("testing HElement", () => {
   test("the creation of a vdom element", () => {
