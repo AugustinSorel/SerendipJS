@@ -8,6 +8,8 @@ export type H = {
 export type HString = {
   type: "text";
   value: string;
+
+  domPointer?: Text;
 };
 
 export type HFragment = {
