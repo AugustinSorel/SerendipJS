@@ -1,6 +1,6 @@
 export type H = {
   type: "element";
-  tagName: string;
+  tagName: keyof HTMLElementTagNameMap;
   props: Record<string, any>;
   children: VNodes[];
 };
