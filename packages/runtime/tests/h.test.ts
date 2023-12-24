@@ -1,19 +1,27 @@
 import { describe, expect, test } from "vitest";
-import { HElement, HFragment, HString, h } from "../src/h";
+import { H, HFragment, HString, h, hFragment, hString } from "../src/h";
 
 describe("testing HElement", () => {
   test("the creation of a vdom element", () => {
-    const candidateDiv = h({
-      type: "element",
-      tagName: "div",
-      props: { class: "super" },
-      children: [],
-    });
+    const candidateDiv = h("div");
 
-    const correctDiv: HElement = {
+    const correctDiv: H = {
       type: "element",
       children: [],
-      props: { class: "super" },
+      props: {},
+      tagName: "div",
+    };
+
+    expect(candidateDiv).toStrictEqual(correctDiv);
+  });
+
+  test("the creation of a vdom element", () => {
+    const candidateDiv = h("div", { class: "container" });
+
+    const correctDiv: H = {
+      type: "element",
+      children: [],
+      props: { class: "container" },
       tagName: "div",
     };
 
@@ -21,20 +29,10 @@ describe("testing HElement", () => {
   });
 
   test("the creation of nested vdom element", () => {
-    const title = h({
-      type: "element",
-      children: [],
-      props: {},
-      tagName: "h1",
-    });
-    const header = h({
-      type: "element",
-      tagName: "header",
-      props: { class: "main-header" },
-      children: [title],
-    });
+    const title = h("h1");
+    const header = h("header", { class: "main-header" }, [title]);
 
-    const correctHeader: HElement = {
+    const correctHeader: H = {
       type: "element",
       children: [
         {
@@ -54,10 +52,7 @@ describe("testing HElement", () => {
 
 describe("testing HString", () => {
   test("the creation of a string element", () => {
-    const candidateString = h({
-      type: "text",
-      value: "hello",
-    });
+    const candidateString = hString("hello");
 
     const correctString: HString = {
       type: "text",
@@ -70,10 +65,7 @@ describe("testing HString", () => {
 
 describe("testing HFragment", () => {
   test("the creation of a fragment element", () => {
-    const candidateFragment = h({
-      type: "fragment",
-      children: [],
-    });
+    const candidateFragment = hFragment([]);
 
     const correctFragment: HFragment = {
       type: "fragment",
@@ -84,19 +76,41 @@ describe("testing HFragment", () => {
   });
 
   test("the creation of a fragment element with children", () => {
-    const candidateFragment = h({
-      type: "fragment",
-      children: [
-        h({ type: "element", children: [], props: {}, tagName: "div" }),
-        h({ type: "text", value: "hello" }),
-      ],
-    });
+    const candidateFragment = hFragment([h("div"), hString("hello")]);
 
     const correctFragment: HFragment = {
       type: "fragment",
       children: [
         { type: "element", children: [], props: {}, tagName: "div" },
         { type: "text", value: "hello" },
+      ],
+    };
+
+    expect(candidateFragment).toStrictEqual(correctFragment);
+  });
+
+  test("the creation of nested fragments", () => {
+    const candidateFragment = hFragment([
+      hFragment([h("div"), hString("hello")]),
+      h("header", { class: "header" }, [hString("world")]),
+    ]);
+
+    const correctFragment: HFragment = {
+      type: "fragment",
+      children: [
+        {
+          type: "fragment",
+          children: [
+            { type: "element", children: [], props: {}, tagName: "div" },
+            { type: "text", value: "hello" },
+          ],
+        },
+        {
+          type: "element",
+          tagName: "header",
+          props: { class: "header" },
+          children: [{ type: "text", value: "world" }],
+        },
       ],
     };
 
