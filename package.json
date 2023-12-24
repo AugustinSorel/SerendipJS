@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "serve:examples": "npx http-server . -o ./examples/",
-    "runtime": "pnpm --filter SerendipJS"
+    "runtime": "pnpm --filter SerendipJS",
+    "test": "pnpm runtime test"
   },
   "keywords": [],
   "author": "",
