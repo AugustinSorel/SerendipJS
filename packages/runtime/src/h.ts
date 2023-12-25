@@ -1,8 +1,13 @@
 export type H = {
   type: "element";
   tagName: keyof HTMLElementTagNameMap;
-  props: Record<string, any>;
+  props: Record<string, any> & {
+    on?: Record<string, any>;
+  };
   children: VNodes[];
+
+  domPointer?: HTMLElement;
+  listeners?: any;
 };
 
 export type HString = {
