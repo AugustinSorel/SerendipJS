@@ -11,7 +11,7 @@ export const addEventListener = (
 };
 
 export const addEventListeners = (
-  listeners: Partial<H["listeners"]>,
+  listeners: NonNullable<H["listeners"]>,
   el: HTMLElement,
 ) => {
   return Object.entries(listeners).reduce((acc, [eventName, handler]) => {
@@ -23,4 +23,13 @@ export const addEventListeners = (
 
     return { ...acc, [eventName]: listener };
   }, {});
+};
+
+export const removeEventListeners = (
+  listeners: NonNullable<H["listeners"]>,
+  el: HTMLElement,
+) => {
+  for (const [eventName, handler] of Object.entries(listeners)) {
+    el.removeEventListener(eventName, handler);
+  }
 };
