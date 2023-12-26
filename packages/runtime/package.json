@@ -8,7 +8,7 @@
     "prepack": "npm run build",
     "build": "rollup -c --configPlugin typescript",
     "test": "vitest run",
-    "test:watch": "vitest run"
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",

@@ -1,18 +1,27 @@
 export type H = {
   type: "element";
-  tagName: string;
-  props: Record<string, any>;
+  tagName: keyof HTMLElementTagNameMap;
+  props: Record<string, any> & {
+    on?: Record<string, any>;
+  };
   children: VNodes[];
+
+  domPointer?: HTMLElement;
+  listeners?: any;
 };
 
 export type HString = {
   type: "text";
   value: string;
+
+  domPointer?: Text;
 };
 
 export type HFragment = {
   type: "fragment";
   children: VNodes[];
+
+  domPointer?: HTMLElement;
 };
 
 export type VNodes = H | HString | HFragment;
