@@ -7,7 +7,7 @@ export type H = {
   children: VNodes[];
 
   domPointer?: HTMLElement;
-  listeners?: any;
+  listeners?: Record<string, any>;
 };
 
 export type HString = {
