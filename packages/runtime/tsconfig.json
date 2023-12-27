@@ -1,4 +1,10 @@
 {
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "dist/dts",
+    "outDir": "./dir"
+  },
   "extends": "../../tsconfig.json",
   "include": ["src/**/*", "rollup.config.ts"]
 }

@@ -34,7 +34,7 @@ describe("testing the mounting of fragment vdom", () => {
     expect(fragment.domPointer).toBeInstanceOf(HTMLElement);
     expect(fragment.domPointer?.tagName.toLowerCase()).toBe("body");
     expect(document.body.innerHTML).toBe(
-      'hello world<h1 class="heading">super cool</h1>',
+      'hello world<h1 class="heading" name="main-title">super cool</h1>',
     );
   });
 
@@ -59,7 +59,7 @@ describe("testing the mounting of fragment vdom", () => {
     expect(fragment.domPointer).toBeInstanceOf(HTMLElement);
     expect(fragment.domPointer?.tagName.toLowerCase()).toBe("body");
     expect(document.body.innerHTML).toBe(
-      'super coolhello world<h1 class="heading" data-status="error">super cool</h1>',
+      'super coolhello world<h1 class="heading" name="main-title" data-status="error">super cool</h1>',
     );
   });
 });
@@ -80,6 +80,9 @@ describe("testing the mounting of an element vdom", () => {
         h("button", { id: "btn", on: { click: clickHandler } }, [
           hString("click me"),
         ]),
+        h("label", { class: "label-style", for: "status-checkbox" }, [
+          hString("hello world"),
+        ]),
       ],
     );
 
@@ -92,7 +95,7 @@ describe("testing the mounting of an element vdom", () => {
     expect(header.domPointer).toBeInstanceOf(HTMLElement);
     expect(header.domPointer?.tagName.toLowerCase()).toBe("header");
     expect(document.body.innerHTML).toBe(
-      '<header class="heading" id="main-heading" data-status="success"><span>hello world</span><button id="btn">click me</button></header>',
+      '<header class="heading" id="main-heading" data-status="success"><span>hello world</span><button id="btn">click me</button><label class="label-style" for="status-checkbox">hello world</label></header>',
     );
     expect(clickHandler).toHaveBeenCalledOnce();
   });

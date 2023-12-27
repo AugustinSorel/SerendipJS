@@ -1,0 +1,160 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  --background-primary: #f4faff;
+  --background-placeholder: #f0f0f0;
+
+  --foreground-primary: #113264;
+  --foreground-placeholder: #e8e8e8;
+  --action-primary: #0588f0;
+
+  --max-width: 75rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--foreground-primary);
+  background-color: var(--background-primary);
+  font-family: "Roboto", sans-serif;
+}
+
+.main-header {
+  background-color: var(--action-primary);
+  color: var(--background-primary);
+
+  padding-block: 1rem;
+  padding-inline: max(calc((100vw - var(--max-width)) * 0.5), 1rem);
+}
+
+.main-title {
+  text-transform: capitalize;
+}
+
+.main-container {
+  margin-top: 1rem;
+  max-width: var(--max-width);
+  margin-inline: auto;
+}
+
+.main-container > *:not(:first-child) {
+  margin-top: 5rem;
+}
+
+.new-todo-form {
+  width: max-content;
+  margin-inline: auto;
+}
+
+.new-todo-form > *:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.new-todo-input {
+  font-size: 1.5rem;
+  border: 0;
+  border-bottom: 1px solid var(--action-primary);
+  background: var(--background-primary);
+  padding: 0.5rem 0.1rem;
+}
+
+.new-todo-submit-button {
+  font-size: 1.5rem;
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  width: 2rem;
+  background-color: var(--action-primary);
+  border: 0;
+  color: var(--background-primary);
+  cursor: pointer;
+}
+
+.list-of-todos {
+  transition: background-color 100ms ease;
+}
+
+.list-of-todos > *:not(:first-child) {
+  border-top: 1px solid var(--foreground-placeholder);
+}
+
+.todo-item {
+  list-style: none;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.todo-item:hover {
+  background-color: var(--background-placeholder);
+}
+
+.todo-item:hover .todo-item-edit-button,
+.todo-item:hover .todo-item-delete-button {
+  opacity: 1;
+}
+
+.todo-item-checkbox {
+}
+
+.todo-item-title {
+  font-weight: 500;
+}
+
+.todo-item-checkbox:checked + .todo-item-title {
+  text-decoration: line-through;
+}
+
+.todo-item-title::first-letter {
+  text-transform: capitalize;
+}
+
+.todo-item-edit-button {
+  margin-left: auto;
+
+  font-weight: 600;
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  width: 2rem;
+  border: 0;
+  cursor: pointer;
+  text-transform: capitalize;
+  background-color: transparent;
+  color: currentColor;
+  transition-duration: 100ms;
+  transition-property: opacity, background-color;
+  transition-timing-function: ease;
+
+  opacity: 0;
+}
+
+.todo-item-edit-button:hover {
+  background-color: var(--action-primary);
+  color: var(--background-primary);
+}
+
+.todo-item-delete-button {
+  font-weight: 600;
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  width: 2rem;
+  border: 0;
+  cursor: pointer;
+  text-transform: capitalize;
+  background-color: transparent;
+  color: currentColor;
+  transition-duration: 100ms;
+  transition-property: opacity, background-color;
+  transition-timing-function: ease;
+
+  opacity: 0;
+}
+
+.todo-item-delete-button:hover {
+  background-color: red;
+  color: var(--background-primary);
+}

@@ -39,10 +39,9 @@ const createFragmentNode = (vdom: HFragment, parentEl: HTMLElement) => {
 const createElementNode = (vdom: H, parentEl: HTMLElement) => {
   const element = document.createElement(vdom.tagName);
 
-  vdom.listeners = addEventListeners(vdom.props.on ?? {}, parentEl);
+  const { class: className, style, on, ...otherProps } = vdom.props;
+  vdom.listeners = addEventListeners(on ?? {}, parentEl);
   vdom.domPointer = element;
-
-  const { class: className, style, ...otherProps } = vdom.props;
 
   if (className) {
     setClass(element, className);
@@ -90,11 +89,8 @@ const removeStyle = (element: HTMLElement, name: string) => {
 const setAttribute = (element: HTMLElement, name: string, value: any) => {
   if (!value) {
     removeAttribute(element, name);
-  } else if (name.startsWith("data-")) {
-    element.setAttribute(name, value);
   } else {
-    //@ts-ignore
-    element[name] = value;
+    element.setAttribute(name, value);
   }
 };
 
