@@ -1,5 +1,6 @@
+import { setAttributes } from "./attributes";
 import { addEventListeners } from "./events";
-import type { H, HFragment, HString, VNodes } from "./h";
+import { HString, VNodes, H, HFragment } from "./h";
 
 export const mountDOM = (vdom: VNodes, parentEl: HTMLElement) => {
   if (vdom.type === "text") {
@@ -37,65 +38,19 @@ const createFragmentNode = (vdom: HFragment, parentEl: HTMLElement) => {
 };
 
 const createElementNode = (vdom: H, parentEl: HTMLElement) => {
-  const element = document.createElement(vdom.tagName);
+  const { tagName, props, children } = vdom;
+  const { on: events, ...attrs } = props;
 
-  const { class: className, style, on, ...otherProps } = vdom.props;
-  vdom.listeners = addEventListeners(on ?? {}, parentEl);
+  const element = document.createElement(tagName);
+
+  vdom.listeners = addEventListeners(events ?? {}, element);
+  setAttributes(element, attrs);
+
   vdom.domPointer = element;
 
-  if (className) {
-    setClass(element, className);
-  }
-
-  if (style) {
-    for (const [prop, value] of Object.entries(style)) {
-      setStyle(element, prop, value);
-    }
-  }
-
-  for (const [name, value] of Object.entries(otherProps)) {
-    setAttribute(element, name, value);
-  }
-
-  for (const children of vdom.children) {
-    mountDOM(children, element);
+  for (const child of children) {
+    mountDOM(child, element);
   }
 
   parentEl.append(element);
-};
-
-const setClass = (element: HTMLElement, className: string | string[]) => {
-  element.className = "";
-
-  if (typeof className === "string") {
-    element.className = className;
-  }
-
-  if (Array.isArray(className)) {
-    element.classList.add(...className);
-  }
-};
-
-const setStyle = (element: HTMLElement, prop: string, value: any) => {
-  //@ts-ignore
-  element.style[prop] = value;
-};
-
-const removeStyle = (element: HTMLElement, name: string) => {
-  //@ts-ignore
-  element.style[name] = null;
-};
-
-const setAttribute = (element: HTMLElement, name: string, value: any) => {
-  if (!value) {
-    removeAttribute(element, name);
-  } else {
-    element.setAttribute(name, value);
-  }
-};
-
-const removeAttribute = (element: HTMLElement, name: string) => {
-  //@ts-ignore
-  element[name] = null;
-  element.removeAttribute(name);
 };

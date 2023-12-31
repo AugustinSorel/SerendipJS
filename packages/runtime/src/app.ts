@@ -3,19 +3,36 @@ import { Dispatcher } from "./dispatcher";
 import { VNodes } from "./h";
 import { mountDOM } from "./mount-dom";
 
-type Props = {
-  state: any;
-  view: (state: any, emit: any) => VNodes;
-  reducers: Record<string, Function>;
+export type Reducer<TState> = Record<
+  string,
+  <TPayload = unknown>(state: TState, payload?: TPayload) => TState
+>;
+
+export type View<TState> = (
+  state: TState,
+  emit: <TPayload = unknown>(name: string, payload?: TPayload) => void,
+) => VNodes;
+
+type Props<TState, TReducers extends Reducer<TState>> = {
+  state: TState;
+  view: View<TState>;
+  reducers: TReducers;
 };
 
-export function createApp({ state, view, reducers }: Props) {
+export const createApp = <TState, TReducers extends Reducer<TState>>({
+  state,
+  view,
+  reducers,
+}: Props<TState, TReducers>) => {
   let parentEl: HTMLElement | null = null;
   let vdom: VNodes | null = null;
 
   const dispatcher = new Dispatcher();
 
-  const emit = (eventName: string, payload: any) => {
+  const emit = <TPayload extends unknown>(
+    eventName: string,
+    payload?: TPayload,
+  ) => {
     dispatcher.dispatch(eventName, payload);
   };
 
@@ -59,4 +76,4 @@ export function createApp({ state, view, reducers }: Props) {
       }
     },
   };
-}
+};

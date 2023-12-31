@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  --background-primary: #191114;
+  --background-secondary: #381525;
+  --background-secondary-hover: #5c1839;
+
+  --ring-primary: #873356;
+  --ring-secondary: #6d2545;
+
+  --foreground-primary: #ff92ad;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--foreground-primary);
+  background-color: var(--background-primary);
+  font-family: "Roboto", sans-serif;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  min-height: 100vh;
+  max-width: 75%;
+  margin-inline: auto;
+}
+
+.text-massive {
+  font-size: 7rem;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn {
+  position: relative;
+  border: none;
+  height: 7rem;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: currentColor;
+  background-color: var(--background-secondary);
+  transition: background-color 100ms ease;
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+.btn:focus-visible,
+.btn:hover {
+  background-color: var(--background-secondary-hover);
+  outline: 5px solid var(--ring-primary);
+}
+
+.tooltip:focus-visible::after,
+.tooltip:hover::after {
+  opacity: 1;
+  translate: -50% 0;
+  transition-delay: 500ms;
+  pointer-events: auto;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  font-size: initial;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border: 3px solid var(--ring-secondary);
+  position: absolute;
+  top: calc(100% + 1rem);
+  left: 50%;
+  translate: -50% 0.5rem;
+  background-color: var(--background-secondary);
+  border-radius: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+
+  transition-delay: 0;
+  transition-property: opactiy translate;
+  transition-duration: 100ms;
+  transition-timing-function: ease;
+}
