@@ -1,13 +1,10 @@
-import { View, createApp, h, hFragment, hString } from "SerendipJS";
+import { Reducer, View, createApp, h, hFragment, hString } from "SerendipJS";
 import "./index.css";
+import { getTodos, saveTodos } from "./localStorage";
 
-type Todo = { id: number; title: string; isDone: boolean };
+export type Todo = { id: number; title: string; isDone: boolean };
 
-const todos: Todo[] = [
-  { id: 1, title: "walk the dog", isDone: false },
-  { id: 2, title: "go outside", isDone: true },
-  { id: 3, title: "make food", isDone: false },
-];
+const todos = getTodos();
 
 const header = h("header", { class: "main-header" }, [
   h("h1", { class: "main-title" }, [hString("todo list")]),
@@ -28,7 +25,7 @@ const newTodoForm = h("form", { class: "new-todo-form" }, [
   ]),
 ]);
 
-const listOfTodos = (todos: Todo[]) => {
+const listOfTodos = (todos: Todo[], emit: any) => {
   return h(
     "ul",
     { class: "list-of-todos" },
@@ -41,6 +38,17 @@ const listOfTodos = (todos: Todo[]) => {
             class: "todo-item-checkbox",
             type: "checkbox",
             checked: todo.isDone,
+            on: {
+              //FIXME: get the correct type here
+              //FIXME: autocomple of events here
+              change: (e: any) => {
+                if (e.currentTarget.checked) {
+                  emit("markAsDone", todo.id);
+                } else {
+                  emit("removeMarkAsDone", todo.id);
+                }
+              },
+            },
           },
           [],
         ),
@@ -60,15 +68,46 @@ const listOfTodos = (todos: Todo[]) => {
   );
 };
 
-const main = (todos: Todo[]) => {
+const main = (todos: Todo[], emit: any) => {
   return h("main", { class: "main-container" }, [
     newTodoForm,
-    listOfTodos(todos),
+    listOfTodos(todos, emit),
   ]);
 };
 
-const View: View<typeof todos> = (state) => hFragment([header, main(state)]);
+const View: View<typeof todos> = (state, emit) =>
+  hFragment([header, main(state, emit)]);
 
-createApp({ state: todos, view: View, reducers: {} }).mount(
+const reducers: Reducer<typeof todos> = {
+  //FIXME: infer the payload
+  markAsDone: (state, id: number) => {
+    const updatedState = state.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isDone: true };
+      }
+      return todo;
+    });
+
+    saveTodos(updatedState);
+
+    return updatedState;
+  },
+
+  //FIXME: infer the payload
+  removeMarkAsDone: (state, id: number) => {
+    const updatedState = state.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isDone: false };
+      }
+      return todo;
+    });
+
+    saveTodos(updatedState);
+
+    return updatedState;
+  },
+};
+
+createApp({ state: todos, view: View, reducers }).mount(
   document.getElementById("app")!,
 );
