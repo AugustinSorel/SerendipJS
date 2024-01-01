@@ -93,6 +93,8 @@ body {
   background-color: var(--background-placeholder);
 }
 
+.todo-item-edit-button:focus-visible,
+.todo-item-delete-button:focus-visible,
 .todo-item:hover .todo-item-edit-button,
 .todo-item:hover .todo-item-delete-button {
   opacity: 1;
@@ -131,7 +133,7 @@ body {
 
   opacity: 0;
 }
-
+.todo-item-edit-button:focus-visible,
 .todo-item-edit-button:hover {
   background-color: var(--action-primary);
   color: var(--background-primary);
@@ -154,6 +156,7 @@ body {
   opacity: 0;
 }
 
+.todo-item-delete-button:focus-visible,
 .todo-item-delete-button:hover {
   background-color: red;
   color: var(--background-primary);
