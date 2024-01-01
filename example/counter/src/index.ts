@@ -30,7 +30,7 @@ const View: View<typeof state> = (state, emit) => {
 };
 
 const reducers: Reducer<typeof state> = {
-  add: (state) => ({ count: state.count }),
+  add: (state) => ({ count: state.count + 1 }),
   sub: (state) => ({ count: state.count - 1 }),
 };
 
