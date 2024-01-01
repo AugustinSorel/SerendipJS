@@ -1,3 +1,5 @@
+//FIXME: add zod
+
 import { Todo } from ".";
 
 const localStorageKey = "todo";

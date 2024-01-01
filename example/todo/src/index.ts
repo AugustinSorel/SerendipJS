@@ -10,21 +10,44 @@ const header = h("header", { class: "main-header" }, [
   h("h1", { class: "main-title" }, [hString("todo list")]),
 ]);
 
-const newTodoForm = h("form", { class: "new-todo-form" }, [
-  h(
-    "input",
+//FIXME: create a type for emit
+const newTodoForm = (emit: any) => {
+  return h(
+    "form",
     {
-      type: "text",
-      placeholder: "new todo...",
-      class: "new-todo-input",
-    },
-    [],
-  ),
-  h("button", { class: "new-todo-submit-button", title: "add new todo" }, [
-    hString("+"),
-  ]),
-]);
+      class: "new-todo-form",
+      on: {
+        submit: (e) => {
+          e.preventDefault();
 
+          //FIXME: add zod
+          const formData = new FormData(e.currentTarget);
+
+          const todoTitle = formData.get("todo-title");
+
+          emit("addNewTodo", todoTitle);
+        },
+      },
+    },
+    [
+      h(
+        "input",
+        {
+          type: "text",
+          placeholder: "new todo...",
+          class: "new-todo-input",
+          name: "todo-title",
+        },
+        [],
+      ),
+      h("button", { class: "new-todo-submit-button", title: "add new todo" }, [
+        hString("+"),
+      ]),
+    ],
+  );
+};
+
+//FIXME: create a type for emit
 const listOfTodos = (todos: Todo[], emit: any) => {
   return h(
     "ul",
@@ -70,7 +93,7 @@ const listOfTodos = (todos: Todo[], emit: any) => {
 
 const main = (todos: Todo[], emit: any) => {
   return h("main", { class: "main-container" }, [
-    newTodoForm,
+    newTodoForm(emit),
     listOfTodos(todos, emit),
   ]);
 };
@@ -101,6 +124,20 @@ const reducers: Reducer<typeof todos> = {
       }
       return todo;
     });
+
+    saveTodos(updatedState);
+
+    return updatedState;
+  },
+
+  addNewTodo: (state, newTodoTitle: string) => {
+    const newTodo: Todo = {
+      id: Math.random(),
+      isDone: false,
+      title: newTodoTitle,
+    };
+
+    const updatedState = [...state, newTodo];
 
     saveTodos(updatedState);
 
