@@ -19,9 +19,10 @@ const newTodoForm = (emit: any) => {
       on: {
         submit: (e) => {
           e.preventDefault();
+          const formElement = <HTMLFormElement>e.currentTarget;
 
           //FIXME: add zod
-          const formData = new FormData(e.currentTarget);
+          const formData = new FormData(formElement);
 
           const todoTitle = formData.get("todo-title");
 
@@ -62,10 +63,8 @@ const listOfTodos = (todos: Todo[], emit: any) => {
             type: "checkbox",
             checked: todo.isDone,
             on: {
-              //FIXME: get the correct type here
-              //FIXME: autocomple of events here
-              change: (e: any) => {
-                if (e.currentTarget.checked) {
+              change: (e) => {
+                if ((<HTMLInputElement>e.currentTarget)?.checked) {
                   emit("markAsDone", todo.id);
                 } else {
                   emit("removeMarkAsDone", todo.id);
