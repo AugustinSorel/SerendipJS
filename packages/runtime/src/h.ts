@@ -26,9 +26,17 @@ export type HFragment = {
 
 export type VNodes = H | HString | HFragment;
 
-export const h = (
+type On<TOn extends Record<keyof HTMLElementEventMap, Function>> = {
+  [Key in keyof TOn]: Key extends keyof HTMLElementEventMap
+    ? Parameters<typeof document.addEventListener<Key>>[1]
+    : never;
+};
+
+export const h = <TOn extends Record<keyof HTMLElementEventMap, Function>>(
   tagName: H["tagName"],
-  props?: H["props"],
+  props?: Record<string, any> & {
+    on?: Partial<On<TOn>>;
+  },
   children?: H["children"],
 ): H => {
   return {
