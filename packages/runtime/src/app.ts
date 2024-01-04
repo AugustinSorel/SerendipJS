@@ -5,7 +5,7 @@ import { mountDOM } from "./mount-dom";
 
 export type Reducer<TState> = Record<
   string,
-  <TPayload = unknown>(state: TState, payload?: TPayload) => TState
+  (state: TState, payload?: any) => TState
 >;
 
 export type View<TState> = (

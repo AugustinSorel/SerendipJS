@@ -101,7 +101,6 @@ const View: View<typeof todos> = (state, emit) =>
   hFragment([header, main(state, emit)]);
 
 const reducers: Reducer<typeof todos> = {
-  //FIXME: infer the payload
   markAsDone: (state, id: number) => {
     const updatedState = state.map((todo) => {
       if (todo.id === id) {
@@ -115,7 +114,6 @@ const reducers: Reducer<typeof todos> = {
     return updatedState;
   },
 
-  //FIXME: infer the payload
   removeMarkAsDone: (state, id: number) => {
     const updatedState = state.map((todo) => {
       if (todo.id === id) {
