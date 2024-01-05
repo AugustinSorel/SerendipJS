@@ -3,23 +3,30 @@ import { Dispatcher } from "./dispatcher";
 import { VNodes } from "./h";
 import { mountDOM } from "./mount-dom";
 
-export type Reducer<TState> = Record<
+export type Reducers<TState> = Record<
   string,
   (state: TState, payload?: any) => TState
 >;
 
-export type View<TState> = (
+export type Emit<TReducers extends Reducers<any>> = <
+  TKey extends keyof TReducers,
+>(
+  key: TKey,
+  payload?: Parameters<TReducers[TKey]>[1],
+) => void;
+
+export type View<TState, TReducers extends Reducers<TState>> = (
   state: TState,
-  emit: <TPayload = unknown>(name: string, payload?: TPayload) => void,
+  emit: Emit<TReducers>,
 ) => VNodes;
 
-type Props<TState, TReducers extends Reducer<TState>> = {
+type Props<TState, TReducers extends Reducers<TState>> = {
   state: TState;
-  view: View<TState>;
+  view: View<TState, TReducers>;
   reducers: TReducers;
 };
 
-export const createApp = <TState, TReducers extends Reducer<TState>>({
+export const createApp = <TState, TReducers extends Reducers<TState>>({
   state,
   view,
   reducers,
@@ -29,11 +36,8 @@ export const createApp = <TState, TReducers extends Reducer<TState>>({
 
   const dispatcher = new Dispatcher();
 
-  const emit = <TPayload extends unknown>(
-    eventName: string,
-    payload?: TPayload,
-  ) => {
-    dispatcher.dispatch(eventName, payload);
+  const emit: Emit<TReducers> = (eventName, payload) => {
+    dispatcher.dispatch(eventName as string, payload);
   };
 
   const renderApp = () => {
@@ -77,3 +81,6 @@ export const createApp = <TState, TReducers extends Reducer<TState>>({
     },
   };
 };
+
+//TODO: make emit 2nd parameter trully optional
+//TODO: find something cleaner instead of satifies
