@@ -1,4 +1,12 @@
-import { Reducer, View, createApp, h, hFragment, hString } from "SerendipJS";
+import {
+  Emit,
+  Reducers,
+  View,
+  createApp,
+  h,
+  hFragment,
+  hString,
+} from "SerendipJS";
 import "./index.css";
 import { getTodos, saveTodos } from "./localStorage";
 
@@ -10,8 +18,7 @@ const header = h("header", { class: "main-header" }, [
   h("h1", { class: "main-title" }, [hString("todo list")]),
 ]);
 
-//FIXME: create a type for emit
-const newTodoForm = (emit: any) => {
+const newTodoForm = (emit: Emit<typeof reducers>) => {
   return h(
     "form",
     {
@@ -24,7 +31,7 @@ const newTodoForm = (emit: any) => {
           //FIXME: add zod
           const formData = new FormData(formElement);
 
-          const todoTitle = formData.get("todo-title");
+          const todoTitle = formData.get("todo-title") as string;
 
           emit("addNewTodo", todoTitle);
         },
@@ -48,8 +55,7 @@ const newTodoForm = (emit: any) => {
   );
 };
 
-//FIXME: create a type for emit
-const listOfTodos = (todos: Todo[], emit: any) => {
+const listOfTodos = (todos: Todo[], emit: Emit<typeof reducers>) => {
   return h(
     "ul",
     { class: "list-of-todos" },
@@ -90,17 +96,17 @@ const listOfTodos = (todos: Todo[], emit: any) => {
   );
 };
 
-const main = (todos: Todo[], emit: any) => {
+const main = (todos: Todo[], emit: Emit<typeof reducers>) => {
   return h("main", { class: "main-container" }, [
     newTodoForm(emit),
     listOfTodos(todos, emit),
   ]);
 };
 
-const View: View<typeof todos> = (state, emit) =>
+const View: View<typeof todos, typeof reducers> = (state, emit) =>
   hFragment([header, main(state, emit)]);
 
-const reducers: Reducer<typeof todos> = {
+const reducers = {
   markAsDone: (state, id: number) => {
     const updatedState = state.map((todo) => {
       if (todo.id === id) {
@@ -140,7 +146,7 @@ const reducers: Reducer<typeof todos> = {
 
     return updatedState;
   },
-};
+} satisfies Reducers<Todo[]>;
 
 createApp({ state: todos, view: View, reducers }).mount(
   document.getElementById("app")!,
