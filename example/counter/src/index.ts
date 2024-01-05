@@ -10,7 +10,7 @@ const View: View<typeof state, typeof reducers> = (state, emit) => {
       {
         class: "btn text-massive tooltip",
         "data-tooltip": "decrement",
-        on: { click: () => emit("sub", undefined) },
+        on: { click: () => emit("sub") },
       },
       [hString("-")],
     ),
@@ -22,7 +22,7 @@ const View: View<typeof state, typeof reducers> = (state, emit) => {
       {
         class: "btn text-massive tooltip",
         "data-tooltip": "increment",
-        on: { click: () => emit("add", undefined) },
+        on: { click: () => emit("add") },
       },
       [hString("+")],
     ),
