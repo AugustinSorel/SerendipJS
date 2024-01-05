@@ -8,11 +8,17 @@ export type Reducers<TState> = Record<
   (state: TState, payload?: any) => TState
 >;
 
-export type Emit<TReducers extends Reducers<any>> = <
-  TKey extends keyof TReducers,
->(
-  key: TKey,
-  payload?: Parameters<TReducers[TKey]>[1],
+type RemoveFirst<T extends unknown[]> = T extends [unknown, ...infer R]
+  ? R
+  : never;
+
+export type Emit<TReducers extends Reducers<any>> = (
+  ...args: {
+    [K in keyof TReducers]: [
+      key: K,
+      ...payload: RemoveFirst<Parameters<TReducers[K]>>,
+    ];
+  }[keyof TReducers]
 ) => void;
 
 export type View<TState, TReducers extends Reducers<TState>> = (
@@ -36,8 +42,8 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
 
   const dispatcher = new Dispatcher();
 
-  const emit: Emit<TReducers> = (eventName, payload) => {
-    dispatcher.dispatch(eventName as string, payload);
+  const emit = (eventName: string, payload: any) => {
+    dispatcher.dispatch(eventName, payload);
   };
 
   const renderApp = () => {
@@ -45,7 +51,7 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
       destroyDom(vdom);
     }
 
-    vdom = view(state, emit);
+    vdom = view(state, emit as Emit<any>);
 
     if (vdom && parentEl) {
       mountDOM(vdom, parentEl);
@@ -82,5 +88,4 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
   };
 };
 
-//TODO: make emit 2nd parameter trully optional
 //TODO: find something cleaner instead of satifies
