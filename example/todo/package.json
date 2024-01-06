@@ -25,6 +25,7 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "SerendipJS": "workspace:^"
+    "SerendipJS": "workspace:^",
+    "zod": "^3.22.4"
   }
 }
