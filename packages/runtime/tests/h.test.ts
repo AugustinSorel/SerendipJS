@@ -30,7 +30,12 @@ describe("testing HElement", () => {
 
   test("the creation of nested vdom element", () => {
     const title = h("h1");
-    const header = h("header", { class: "main-header" }, [title]);
+    const header = h("header", { class: "main-header" }, [
+      null,
+      title,
+      null,
+      null,
+    ]);
 
     const correctHeader: H = {
       type: "element",
