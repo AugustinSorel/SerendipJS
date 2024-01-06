@@ -9,8 +9,16 @@ import {
 } from "SerendipJS";
 import "./index.css";
 import { getTodos, saveTodos } from "./localStorage";
+import { z } from "zod";
 
-export type Todo = { id: number; title: string; isDone: boolean };
+export const todoSchema = z.object({
+  id: z.number(),
+  title: z.string().trim().min(1),
+  isDone: z.boolean(),
+});
+export const todosSchema = todoSchema.array();
+
+export type Todo = z.infer<typeof todoSchema>;
 
 const todos = getTodos();
 
@@ -28,12 +36,17 @@ const newTodoForm = (emit: Emit<typeof reducers>) => {
           e.preventDefault();
           const formElement = <HTMLFormElement>e.currentTarget;
 
-          //FIXME: add zod
           const formData = new FormData(formElement);
 
-          const todoTitle = formData.get("todo-title") as string;
+          const todoTitle = todoSchema.shape.title.safeParse(
+            formData.get("todo-title"),
+          );
 
-          emit("addNewTodo", todoTitle);
+          if (!todoTitle.success) {
+            return alert("todo title cannot be empty");
+          }
+
+          emit("addNewTodo", todoTitle.data);
         },
       },
     },

@@ -1,6 +1,4 @@
-//FIXME: add zod
-
-import { Todo } from ".";
+import { Todo, todosSchema } from ".";
 
 const localStorageKey = "todo";
 
@@ -9,9 +7,12 @@ export const saveTodos = (todos: Todo[]) => {
 };
 
 export const getTodos = () => {
-  const todos = localStorage.getItem(localStorageKey) ?? "";
+  try {
+    const unsafeTodos = localStorage.getItem(localStorageKey) ?? "";
+    const todos = todosSchema.parse(JSON.parse(unsafeTodos));
 
-  const parsedTodos = JSON.parse(todos) || [];
-
-  return parsedTodos as Todo[];
+    return todos;
+  } catch (e) {
+    return [];
+  }
 };

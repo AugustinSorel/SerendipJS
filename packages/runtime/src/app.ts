@@ -42,7 +42,7 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
 
   const dispatcher = new Dispatcher();
 
-  const emit = (eventName: string, payload: any) => {
+  const emit: Emit<any> = (eventName, payload) => {
     dispatcher.dispatch(eventName, payload);
   };
 
@@ -51,7 +51,7 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
       destroyDom(vdom);
     }
 
-    vdom = view(state, emit as Emit<any>);
+    vdom = view(state, emit);
 
     if (vdom && parentEl) {
       mountDOM(vdom, parentEl);
@@ -87,5 +87,3 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
     },
   };
 };
-
-//TODO: find something cleaner instead of satifies
