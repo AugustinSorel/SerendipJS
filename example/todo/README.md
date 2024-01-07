@@ -4,4 +4,4 @@ very basic todo list app showing how **SerendipJS** works.
 
 ## Example
 
-![ezgif com-video-to-gif-converter (1)](https://github.com/AugustinSorel/SerendipJS/assets/48162609/721610ab-88e3-4fb5-86e3-20b1199fc19a)
+![9e951851-bd8c-473a-bab6-ee2297d2ae94](https://github.com/AugustinSorel/SerendipJS/assets/48162609/a56a4cec-0e89-40cc-a8c0-d2f3805b2c6b)
