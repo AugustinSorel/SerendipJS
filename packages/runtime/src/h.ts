@@ -24,7 +24,14 @@ export type HFragment = {
   domPointer?: HTMLElement;
 };
 
-export type VNodes = H | HString | HFragment;
+export type HPortal = {
+  type: "portal";
+
+  children: VNodes | null;
+  domPointer: HTMLElement;
+};
+
+export type VNodes = H | HString | HFragment | HPortal;
 
 type On<TOn extends Record<keyof HTMLElementEventMap, Function>> = {
   [Key in keyof TOn]: Key extends keyof HTMLElementEventMap
@@ -37,13 +44,13 @@ export const h = <TOn extends Record<keyof HTMLElementEventMap, Function>>(
   props?: Record<string, any> & {
     on?: Partial<On<TOn>>;
   },
-  children?: H["children"],
+  children?: (VNodes | null)[],
 ): H => {
   return {
     type: "element",
     tagName,
     props: props ?? {},
-    children: children ?? [],
+    children: children?.filter(removeNull) ?? [],
   };
 };
 
@@ -54,9 +61,24 @@ export const hString = (value: HString["value"]): HString => {
   };
 };
 
-export const hFragment = (children: HFragment["children"]): HFragment => {
+export const hFragment = (children: (VNodes | null)[]): HFragment => {
   return {
     type: "fragment",
-    children,
+    children: children.filter(removeNull),
   };
+};
+
+export const hPortal = (
+  children: H | HString | null,
+  targetEl: HTMLElement,
+): HPortal => {
+  return {
+    type: "portal",
+    children,
+    domPointer: targetEl,
+  };
+};
+
+const removeNull = <TValue,>(value: TValue | null): value is TValue => {
+  return value !== null;
 };

@@ -17,7 +17,7 @@ const config: Configuration = {
     static: {
       directory: path.resolve(__dirname, "./dist"),
     },
-    port: 3001,
+    port: 3000,
     hot: true,
     compress: true,
     historyApiFallback: true,
