@@ -2,6 +2,7 @@ import { destroyDom } from "./destroy-dom";
 import { Dispatcher } from "./dispatcher";
 import { VNodes } from "./h";
 import { mountDOM } from "./mount-dom";
+import { patchDom } from "./patch-dom";
 
 export type Reducers<TState> = Record<
   string,
@@ -39,6 +40,7 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
 }: Props<TState, TReducers>) => {
   let parentEl: HTMLElement | null = null;
   let vdom: VNodes | null = null;
+  let isMounted = false;
 
   const dispatcher = new Dispatcher();
 
@@ -47,15 +49,9 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
   };
 
   const renderApp = () => {
-    if (vdom) {
-      destroyDom(vdom);
-    }
+    const newVdom = view(state, emit);
 
-    vdom = view(state, emit);
-
-    if (vdom && parentEl) {
-      mountDOM(vdom, parentEl);
-    }
+    vdom = patchDom(vdom, newVdom, parentEl);
   };
 
   const subscriptions = [dispatcher.afterEveryCommand(renderApp)];
@@ -70,8 +66,14 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
 
   return {
     mount: (_parentEl: HTMLElement) => {
+      if (isMounted) {
+        throw new Error("The application is already mounted");
+      }
+
       parentEl = _parentEl;
-      renderApp();
+      vdom = view(state, emit);
+      mountDOM(vdom, parentEl);
+      isMounted = true;
     },
 
     unmount: () => {
@@ -84,6 +86,8 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
       for (const subscription of subscriptions) {
         subscription();
       }
+
+      isMounted = false;
     },
   };
 };
