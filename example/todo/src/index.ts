@@ -395,13 +395,4 @@ const reducers = {
   },
 } satisfies Reducers<State>;
 
-// createApp({ state, view: View, reducers }).mount(rootEl);
-
-createApp({
-  state: 0,
-  view: () =>
-    h("header", {}, [
-      h("div", [hPortal(hString("portal string"), document.body)]),
-    ]),
-  reducers: {},
-}).mount(rootEl);
+createApp({ state, view: View, reducers }).mount(rootEl);
