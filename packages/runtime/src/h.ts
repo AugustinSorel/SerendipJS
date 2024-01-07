@@ -1,3 +1,5 @@
+import { removeNull } from "./arrays";
+
 export type H = {
   type: "element";
   tagName: keyof HTMLElementTagNameMap;
@@ -77,8 +79,4 @@ export const hPortal = (
     children,
     domPointer: targetEl,
   };
-};
-
-const removeNull = <TValue,>(value: TValue | null): value is TValue => {
-  return value !== null;
 };
