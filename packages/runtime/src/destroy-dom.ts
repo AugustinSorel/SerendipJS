@@ -1,5 +1,5 @@
 import { removeEventListeners } from "./events";
-import { H, HFragment, HString, VNodes } from "./h";
+import { H, HFragment, HString, VNodes, HPortal } from "./h";
 
 export const destroyDom = (vdom: VNodes) => {
   if (vdom.type === "text") {
@@ -14,6 +14,11 @@ export const destroyDom = (vdom: VNodes) => {
 
   if (vdom.type === "fragment") {
     destroyFragmentNode(vdom);
+    return;
+  }
+
+  if (vdom.type === "portal") {
+    destroyPortalNode(vdom);
     return;
   }
 
@@ -47,4 +52,12 @@ const destroyFragmentNode = (fragmentNode: HFragment) => {
   }
 
   delete fragmentNode.domPointer;
+};
+
+const destroyPortalNode = (portalNode: HPortal) => {
+  if (!portalNode.children) {
+    return;
+  }
+
+  destroyDom(portalNode.children);
 };

@@ -24,7 +24,14 @@ export type HFragment = {
   domPointer?: HTMLElement;
 };
 
-export type VNodes = H | HString | HFragment;
+export type HPortal = {
+  type: "portal";
+
+  children: VNodes | null;
+  domPointer: HTMLElement;
+};
+
+export type VNodes = H | HString | HFragment | HPortal;
 
 type On<TOn extends Record<keyof HTMLElementEventMap, Function>> = {
   [Key in keyof TOn]: Key extends keyof HTMLElementEventMap
@@ -58,6 +65,17 @@ export const hFragment = (children: (VNodes | null)[]): HFragment => {
   return {
     type: "fragment",
     children: children.filter(removeNull),
+  };
+};
+
+export const hPortal = (
+  children: H | HString | null,
+  targetEl: HTMLElement,
+): HPortal => {
+  return {
+    type: "portal",
+    children,
+    domPointer: targetEl,
   };
 };
 

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { destroyDom } from "../src/destroy-dom";
-import { h, hFragment, hString } from "../src/h";
+import { h, hFragment, hPortal, hString } from "../src/h";
 import { mountDOM } from "../src/mount-dom";
 
 beforeEach(() => {
@@ -81,5 +81,41 @@ describe("testing the destruction of a fragment node", () => {
 
     expect(document.body.innerHTML).toBe("");
     expect(app.domPointer).not.toBeDefined();
+  });
+});
+
+describe("testing the destruction of a hPortal node", () => {
+  test("the destruction of a hPortal", () => {
+    const header = h("header", {}, [
+      h("h1", {}, [
+        hString("my header"),
+        hPortal(
+          h("button", { class: "btn" }, [hString("portal string")]),
+          document.body,
+        ),
+      ]),
+    ]);
+
+    mountDOM(header, document.body);
+
+    destroyDom(header);
+
+    expect(document.body.innerHTML).toBe("");
+    expect(header.domPointer).not.toBeDefined();
+    expect(header.children.length).toBe(1);
+  });
+
+  test("the destruction of a hPortal with a vdom of null", () => {
+    const header = h("header", {}, [
+      h("h1", {}, [hString("my header"), hPortal(null, document.body)]),
+    ]);
+
+    mountDOM(header, document.body);
+
+    destroyDom(header);
+
+    expect(document.body.innerHTML).toBe("");
+    expect(header.domPointer).not.toBeDefined();
+    expect(header.children.length).toBe(1);
   });
 });

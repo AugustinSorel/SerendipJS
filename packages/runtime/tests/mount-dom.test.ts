@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { mountDOM } from "../src/mount-dom";
-import { h, hFragment, hString } from "../src/h";
+import { h, hFragment, hPortal, hString } from "../src/h";
 
 beforeEach(() => {
   document.body.innerHTML = "";
@@ -98,5 +98,37 @@ describe("testing the mounting of an element vdom", () => {
       '<header class="heading" id="main-heading" data-status="success"><span>hello world</span><button id="btn">click me</button><label class="label-style" for="status-checkbox">hello world</label></header>',
     );
     expect(clickHandler).toHaveBeenCalledOnce();
+  });
+});
+
+describe("testing the mounting of an hPortal  vdom", () => {
+  test("if mounting a hPortal works", () => {
+    const header = h("header", {}, [
+      h("h1", {}, [
+        hString("my header"),
+        hPortal(
+          h("button", { class: "btn" }, [hString("portal string")]),
+          document.body,
+        ),
+      ]),
+    ]);
+
+    mountDOM(header, document.body);
+
+    expect(document.body.children.length).toBe(2);
+    expect(document.body.innerHTML).toBe(
+      `<button class="btn">portal string</button><header><h1>my header</h1></header>`,
+    );
+  });
+
+  test("if mounting a hPortal works with a vdom of null", () => {
+    const header = h("header", {}, [
+      h("h1", {}, [hString("my header"), hPortal(null, document.body)]),
+    ]);
+
+    mountDOM(header, document.body);
+
+    expect(document.body.children.length).toBe(1);
+    expect(document.body.innerHTML).toBe(`<header><h1>my header</h1></header>`);
   });
 });

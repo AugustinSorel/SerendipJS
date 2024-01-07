@@ -18,7 +18,16 @@ export const mountDOM = (vdom: VNodes, parentEl: HTMLElement) => {
     return;
   }
 
-  throw new Error(`vdom type: ${vdom} is not being handle`);
+  if (vdom.type === "portal") {
+    if (!vdom.children) {
+      return;
+    }
+
+    mountDOM(vdom.children, vdom.domPointer);
+    return;
+  }
+
+  throw new Error(`vdom type: ${JSON.stringify(vdom)} is not being handle`);
 };
 
 const createTextNode = (vdom: HString, parentEl: HTMLElement) => {

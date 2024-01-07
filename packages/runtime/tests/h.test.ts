@@ -1,5 +1,14 @@
 import { describe, expect, test } from "vitest";
-import { H, HFragment, HString, h, hFragment, hString } from "../src/h";
+import {
+  H,
+  HFragment,
+  HPortal,
+  HString,
+  h,
+  hFragment,
+  hPortal,
+  hString,
+} from "../src/h";
 
 describe("testing HElement", () => {
   test("the creation of a vdom element", () => {
@@ -120,5 +129,61 @@ describe("testing HFragment", () => {
     };
 
     expect(candidateFragment).toStrictEqual(correctFragment);
+  });
+});
+
+describe("testing HPortal", () => {
+  test("the creation of a hPortal with HString", () => {
+    const candidatePortal = hPortal(hString("hello"), document.body);
+
+    const correctFragment: HPortal = {
+      type: "portal",
+      children: {
+        type: "text",
+        value: "hello",
+      },
+      domPointer: document.body,
+    };
+
+    expect(candidatePortal).toStrictEqual(correctFragment);
+  });
+
+  test("the creation of a hPortal with H", () => {
+    const candidatePortal = hPortal(
+      h("button", { class: "main-btn" }, [hString("click me")]),
+      document.body,
+    );
+
+    const correctFragment: HPortal = {
+      type: "portal",
+      children: {
+        type: "element",
+        props: {
+          class: "main-btn",
+        },
+        tagName: "button",
+        children: [
+          {
+            type: "text",
+            value: "click me",
+          },
+        ],
+      },
+      domPointer: document.body,
+    };
+
+    expect(candidatePortal).toStrictEqual(correctFragment);
+  });
+
+  test("the creation of a hPortal with null", () => {
+    const candidatePortal = hPortal(null, document.body);
+
+    const correctFragment: HPortal = {
+      type: "portal",
+      children: null,
+      domPointer: document.body,
+    };
+
+    expect(candidatePortal).toStrictEqual(correctFragment);
   });
 });
