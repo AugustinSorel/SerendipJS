@@ -4,6 +4,8 @@
   --background-primary: #f4faff;
   --background-placeholder: #f0f0f0;
 
+  --destructive-primary: #ff0000;
+
   --foreground-primary: #113264;
   --foreground-placeholder: #e8e8e8;
   --action-primary: #0588f0;
@@ -21,6 +23,7 @@ body {
   color: var(--foreground-primary);
   background-color: var(--background-primary);
   font-family: "Roboto", sans-serif;
+  position: relative;
 }
 
 .main-header {
@@ -100,9 +103,6 @@ body {
   opacity: 1;
 }
 
-.todo-item-checkbox {
-}
-
 .todo-item-title {
   font-weight: 500;
 }
@@ -158,6 +158,141 @@ body {
 
 .todo-item-delete-button:focus-visible,
 .todo-item-delete-button:hover {
-  background-color: red;
+  background-color: var(--destructive-primary);
   color: var(--background-primary);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: #00000050;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.modal {
+  background-color: var(--background-primary);
+  border: 3px solid var(--background-placeholder);
+  padding: 1rem;
+}
+
+.edit-todo-modal {
+  display: flex;
+  flex-direction: column;
+  min-width: 20rem;
+}
+
+.edit-todo-modal-label {
+  color: gray;
+  text-transform: capitalize;
+}
+
+.edit-todo-modal-input {
+  margin-bottom: auto;
+  font-size: 1.5rem;
+  border: 0;
+  border-bottom: 1px solid var(--action-primary);
+  background: var(--background-primary);
+  padding: 0.5rem 0.1rem;
+}
+
+.modal-actions-container {
+  margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.modal-cancel-button {
+  margin-left: auto;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-size: 1rem;
+  color: gray;
+}
+
+.modal-cancel-button:hover,
+.modal-cancel-button:focus-visible {
+  text-decoration: underline;
+  color: initial;
+}
+
+.modal-sumit-button {
+  cursor: pointer;
+  background-color: var(--action-primary);
+  border: 0;
+  color: var(--background-primary);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.modal-sumit-button:hover {
+  opacity: 0.8;
+}
+
+.alert {
+  background-color: var(--background-primary);
+  border: 3px solid var(--background-placeholder);
+  padding: 1rem;
+}
+
+.delete-todo-alert {
+  display: flex;
+  flex-direction: column;
+  min-width: 20rem;
+}
+
+.alert-text {
+  font-size: 1.5rem;
+}
+
+.alert-text::first-letter {
+  text-transform: capitalize;
+}
+
+.alert-sub-text {
+  color: gray;
+}
+
+.alert-sub-text::first-letter {
+  text-transform: capitalize;
+}
+
+.alert-actions-container {
+  margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.alert-cancel-button {
+  margin-left: auto;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-size: 1rem;
+  color: gray;
+}
+
+.alert-cancel-button:hover,
+.alert-cancel-button:focus-visible {
+  text-decoration: underline;
+  color: initial;
+}
+
+.alert-submit-button {
+  cursor: pointer;
+  background-color: var(--destructive-primary);
+  border: 0;
+  color: var(--background-primary);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.alert-submit-button:hover {
+  opacity: 0.8;
 }
