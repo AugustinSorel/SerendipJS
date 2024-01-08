@@ -1,4 +1,7 @@
-export const objectsDiff = (oldObj: object, newObj: object) => {
+export const objectsDiff = (
+  oldObj: Record<string, any>,
+  newObj: Record<string, any>,
+) => {
   const oldKeys = Object.keys(oldObj);
   const newKeys = Object.keys(newObj);
 
