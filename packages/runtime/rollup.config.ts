@@ -1,5 +1,4 @@
 import cleanup from "rollup-plugin-cleanup";
-import filesize from "rollup-plugin-filesize";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 
@@ -13,7 +12,6 @@ const config: RollupOptions[] = [
       {
         file: "dist/index.js",
         format: "esm",
-        plugins: [filesize()],
       },
     ],
   },

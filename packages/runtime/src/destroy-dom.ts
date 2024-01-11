@@ -55,9 +55,7 @@ const destroyFragmentNode = (fragmentNode: HFragment) => {
 };
 
 const destroyPortalNode = (portalNode: HPortal) => {
-  if (!portalNode.children) {
-    return;
+  for (const children of portalNode.children) {
+    destroyDom(children);
   }
-
-  destroyDom(portalNode.children);
 };
