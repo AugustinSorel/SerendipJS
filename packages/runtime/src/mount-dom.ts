@@ -24,7 +24,7 @@ export const mountDOM = (
 
   if (vdom.type === "portal") {
     vdom.children.forEach((children, i) => {
-      mountDOM(children, parentEl, index ? index + i : undefined);
+      mountDOM(children, vdom.domPointer, index ? index + i : undefined);
     });
     return;
   }
