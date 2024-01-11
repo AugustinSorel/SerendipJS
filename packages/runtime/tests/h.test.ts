@@ -138,10 +138,12 @@ describe("testing HPortal", () => {
 
     const correctFragment: HPortal = {
       type: "portal",
-      children: {
-        type: "text",
-        value: "hello",
-      },
+      children: [
+        {
+          type: "text",
+          value: "hello",
+        },
+      ],
       domPointer: document.body,
     };
 
@@ -156,19 +158,21 @@ describe("testing HPortal", () => {
 
     const correctFragment: HPortal = {
       type: "portal",
-      children: {
-        type: "element",
-        props: {
-          class: "main-btn",
-        },
-        tagName: "button",
-        children: [
-          {
-            type: "text",
-            value: "click me",
+      children: [
+        {
+          type: "element",
+          props: {
+            class: "main-btn",
           },
-        ],
-      },
+          tagName: "button",
+          children: [
+            {
+              type: "text",
+              value: "click me",
+            },
+          ],
+        },
+      ],
       domPointer: document.body,
     };
 
@@ -180,7 +184,7 @@ describe("testing HPortal", () => {
 
     const correctFragment: HPortal = {
       type: "portal",
-      children: null,
+      children: [],
       domPointer: document.body,
     };
 

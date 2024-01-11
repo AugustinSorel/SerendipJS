@@ -49,9 +49,10 @@ export const createApp = <TState, TReducers extends Reducers<TState>>({
   };
 
   const renderApp = () => {
-    const newVdom = view(state, emit);
-
-    vdom = patchDom(vdom, newVdom, parentEl);
+    if (vdom && parentEl) {
+      const newVdom = view(state, emit);
+      vdom = patchDom(vdom, newVdom, parentEl);
+    }
   };
 
   const subscriptions = [dispatcher.afterEveryCommand(renderApp)];

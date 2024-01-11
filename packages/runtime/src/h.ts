@@ -29,7 +29,7 @@ export type HFragment = {
 export type HPortal = {
   type: "portal";
 
-  children: VNodes | null;
+  children: VNodes[];
   domPointer: HTMLElement;
 };
 
@@ -76,7 +76,25 @@ export const hPortal = (
 ): HPortal => {
   return {
     type: "portal",
-    children,
+    children: [children].filter(removeNull),
     domPointer: targetEl,
   };
 };
+
+export function extractChildren(vdom: HFragment | HPortal | H) {
+  if (vdom.children == null) {
+    return [];
+  }
+
+  const children: VNodes[] = [];
+
+  for (const child of vdom.children) {
+    if (child.type === "fragment") {
+      children.push(...extractChildren(child));
+    } else {
+      children.push(child);
+    }
+  }
+
+  return children;
+}

@@ -1,7 +1,7 @@
 import { H } from "./h";
 
 export const addEventListener = (
-  eventName: keyof HTMLElementEventMap,
+  eventName: string,
   handler: Parameters<HTMLElement["addEventListener"]>[1],
   el: HTMLElement,
 ) => {

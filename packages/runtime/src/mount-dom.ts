@@ -2,51 +2,61 @@ import { setAttributes } from "./attributes";
 import { addEventListeners } from "./events";
 import { HString, VNodes, H, HFragment } from "./h";
 
-export const mountDOM = (vdom: VNodes, parentEl: HTMLElement) => {
+export const mountDOM = (
+  vdom: VNodes,
+  parentEl: HTMLElement,
+  index?: number,
+) => {
   if (vdom.type === "text") {
-    createTextNode(vdom, parentEl);
+    createTextNode(vdom, parentEl, index);
     return;
   }
 
   if (vdom.type === "fragment") {
-    createFragmentNode(vdom, parentEl);
+    createFragmentNode(vdom, parentEl, index);
     return;
   }
 
   if (vdom.type === "element") {
-    createElementNode(vdom, parentEl);
+    createElementNode(vdom, parentEl, index);
     return;
   }
 
   if (vdom.type === "portal") {
-    if (!vdom.children) {
-      return;
-    }
-
-    mountDOM(vdom.children, vdom.domPointer);
+    vdom.children.forEach((children, i) => {
+      mountDOM(children, parentEl, index ? index + i : undefined);
+    });
     return;
   }
 
   throw new Error(`vdom type: ${JSON.stringify(vdom)} is not being handle`);
 };
 
-const createTextNode = (vdom: HString, parentEl: HTMLElement) => {
+const createTextNode = (
+  vdom: HString,
+  parentEl: HTMLElement,
+  index?: number,
+) => {
   const textNode = document.createTextNode(vdom.value);
 
   vdom.domPointer = textNode;
 
-  parentEl.append(textNode);
+  insert(textNode, parentEl, index);
 };
 
-const createFragmentNode = (vdom: HFragment, parentEl: HTMLElement) => {
+const createFragmentNode = (
+  vdom: HFragment,
+  parentEl: HTMLElement,
+  index?: number,
+) => {
   vdom.domPointer = parentEl;
 
-  for (const children of vdom.children) {
-    mountDOM(children, parentEl);
-  }
+  vdom.children.forEach((children, i) => {
+    mountDOM(children, parentEl, index ? index + i : undefined);
+  });
 };
 
-const createElementNode = (vdom: H, parentEl: HTMLElement) => {
+const createElementNode = (vdom: H, parentEl: HTMLElement, index?: number) => {
   const { tagName, props, children } = vdom;
   const { on: events, ...attrs } = props;
 
@@ -61,5 +71,28 @@ const createElementNode = (vdom: H, parentEl: HTMLElement) => {
     mountDOM(child, element);
   }
 
-  parentEl.append(element);
+  insert(element, parentEl, index);
+};
+
+export const insert = (
+  el: HTMLElement | Text,
+  parentEl: HTMLElement,
+  index?: number,
+) => {
+  if (index == null) {
+    parentEl.append(el);
+    return;
+  }
+
+  if (index < 0) {
+    throw new Error(`Index must be a positive integer, got ${index}`);
+  }
+
+  const children = parentEl.childNodes;
+
+  if (index >= children.length) {
+    parentEl.append(el);
+  } else {
+    parentEl.insertBefore(el, children[index]);
+  }
 };
