@@ -1,7 +1,74 @@
 # SerendipJS
+Attempt to write a frontend framework from scratch as a learning opportunity
 
-> [!CAUTION]
-> This framework should not be use in production as this is a learning project.
+> [!Important]
+> This project has a lot of missing parts/features as this as this is learning project
+
+## Features
+* Diffing and patching Algorithm for minimal re render 
+* Vdom tree with 4 nodes (portal, element, string and fragment)
+* Full typescript support
+
+## Counter app Example
+
+### Defining  the state
+
+```ts
+const state = { count: 0 };
+```
+
+### Defining the actions
+```ts
+const reducers = {
+  add: (state) => ({ count: state.count + 1 }),
+  sub: (state) => ({ count: state.count - 1 }),
+} satisfies Reducers<typeof state>;
+```
+
+### Defining the view
+
+```ts
+const View: View<typeof state, typeof reducers> = (state, emit) => {
+  return h("main", { class: "main-container" }, [
+    h(
+      "button",
+      {
+        class: "btn text-massive tooltip",
+        "data-tooltip": "decrement",
+        on: { click: () => emit("sub") },
+      },
+      [hString("-")],
+    ),
+    h("span", { class: "text-massive truncate" }, [
+      hString(state.count.toString()),
+    ]),
+    h(
+      "button",
+      {
+        class: "btn text-massive tooltip",
+        "data-tooltip": "increment",
+        on: { click: () => emit("add") },
+      },
+      [hString("+")],
+    ),
+  ]);
+};
+```
+
+### Mounting the app
+```ts
+createApp({ state, view: View, reducers }).mount(
+  document.getElementById("app")!,
+)
+```
+
+### Ouput
+![2024-01-12 18-49-00 (online-video-cutter com)](https://github.com/AugustinSorel/SerendipJS/assets/48162609/dd380687-40ac-48d8-a606-3238c0d27160)
+
+## Project structur
+* `/packages/runtime`: core library
+* `/example/counter`: counter app example
+* `/example/todo`: todo app example
 
 ## TODOS
 
@@ -9,7 +76,7 @@
 - [ ] jsx
 - [ ] error boundaries
 - [ ] component fn
-- [ ] diffing algorithm
+- [x] diffing algorithm
 - [x] add portal virtual nodes
 - [x] rerender node on state changes
 - [x] add state
