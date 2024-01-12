@@ -1,7 +1,13 @@
 # SerendipJS
+Attempt to write a frontend framework from scratchas a learning opportunity
 
-> [!CAUTION]
-> This framework should not be use in production as this is a learning project.
+> [!Important]
+> This project has a lot of missing parts/features as this as this is learning project
+
+## Features
+* Diffing and patching Algorithm for minimal re render 
+* Vdom tree with 4 nodes (portal, element, string and fragment)
+* Full typescript support
 
 ## Counter app Example
 
@@ -12,7 +18,7 @@ const state = { count: 0 };
 ```
 
 ### Defining the actions
-```tsx
+```ts
 const reducers = {
   add: (state) => ({ count: state.count + 1 }),
   sub: (state) => ({ count: state.count - 1 }),
@@ -53,7 +59,16 @@ const View: View<typeof state, typeof reducers> = (state, emit) => {
 ```ts
 createApp({ state, view: View, reducers }).mount(
   document.getElementById("app")!,
-)```
+)
+```
+
+### Ouput
+![2024-01-01 17-26-54 (online-video-cutter com)](https://github.com/AugustinSorel/SerendipJS/assets/48162609/ed9f7e42-c710-4f93-a453-0da159eb381a)
+
+## Project structur
+* `/packages/runtime`: core library
+* `/example/counter`: counter app example
+* `/example/todo`: todo app example
 
 ## TODOS
 
